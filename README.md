@@ -1,2 +1,10 @@
 # fullstack_task_raunak
-a todo app
+
+```
+npm install
+```
+
+```
+npm run dev
+```
+

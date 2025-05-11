@@ -9,7 +9,7 @@ const AllNotes = () => {
   return (
     <div className="3xl:text-[30px] lg:text-[22px] 3xl:pt-3">
       <h1 className="font-bold border-b border-[#C5CAD3]">Notes</h1>
-      <div className="font-normal max-h-[24vh] overflow-scroll">
+      <div className="font-normal max-h-[24vh] overflow-y-scroll">
         {allNotes && allNotes.length > 0 ? (
           allNotes.map((el, idx) => {
             return (

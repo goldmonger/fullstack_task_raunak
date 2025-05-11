@@ -87,14 +87,15 @@ const useMqtt = () => {
   };
 
   const handlePublish = async () => {
-    const data: HTMLInputElement | null = document.getElementById(
-      "form-input"
-    ) as HTMLInputElement;
-    // console.log(data?.value);
-
+    const inputElement = document.getElementById("form-input");
+    if (inputElement === null) {
+      throw new Error("form error");
+    }
+    const data = (inputElement as HTMLInputElement).value;
     // send the message to the broker
-    publishRecord.payload = data.value;
+    publishRecord.payload = data;
     mqttPublish(publishRecord);
+    (inputElement as HTMLInputElement).value = "";
 
     //              DEV POST TEST CODE
     // const responseData = JSON.stringify({ data: data.value });

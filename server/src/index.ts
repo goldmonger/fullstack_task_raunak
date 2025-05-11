@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { router } from "./routes/index.js";
+import { setup } from "./mqttClient.js";
 
 const app = express();
 const serverPort = process.env.SERVER_PORT;
@@ -13,6 +14,9 @@ const corsOptions = {
   allowedHeaders: ["Content-Type"],
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
+
+// setup mqtt client
+setup();
 
 //                                       Middleware
 // check if needed

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
+
 const useNotes = () => {
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState<undefined | string[]>();
 
   const fetchData = () => {
     fetch(
@@ -12,6 +13,7 @@ const useNotes = () => {
       .then((response) => response.json())
       .then((data) => {
         setNotes(data.tasks);
+        console.log(data);
       })
       .catch((err) => {
         console.error(err);

@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { brokerUrl, initialConnectionOptions } from "../mqtt.config";
 import mqtt from "mqtt";
-import useNotes from "./useNotes";
+import NotesContext from "../contexts/NotesContext";
 
 const useMqtt = () => {
-  const { refetch } = useNotes();
+  const { refetch } = useContext(NotesContext);
   const [client, setClient] = useState<null | any>(null);
-  const [payload, setPayload] = useState<null | any>(null);
   const [connectStatus, setConnectStatus] = useState<string>("Connect.");
 
   // @ts-ignore
@@ -15,7 +14,7 @@ const useMqtt = () => {
     setClient(mqtt.connect(host, mqttOption));
   };
   const subscribeRecord = {
-    topic: "/add",
+    topic: "/refetch",
     qos: 0,
   };
   const publishRecord = {
@@ -127,7 +126,9 @@ const useMqtt = () => {
       // @ts-ignore
       client.on("message", (topic, message) => {
         // a new todo has been added, trigger update of list
-        refetch();
+        if (topic === "/refetch") {
+          refetch();
+        }
       });
     } else {
       mqttConnect(brokerUrl, initialConnectionOptions);

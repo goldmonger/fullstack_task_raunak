@@ -16,52 +16,101 @@ function App() {
     setConnectStatus("Connecting...");
     setClient(mqtt.connect(host, mqttOption));
   };
+  const subscribeRecord = {
+    topic: "/add",
+    qos: 0,
+  };
+  const publishRecord = {
+    topic: "/add",
+    qos: 0,
+    payload: "",
+  };
 
-  // const mqttPublish = (context) => {
-  //   if (client) {
-  //     const { topic, qos, payload } = context;
-  //     client.publish(topic, payload, { qos }, (error) => {
-  //       if (error) {
-  //         console.log("Publish error: ", error);
-  //       }
-  //     });
-  //   }
-  // };
+  const mqttPublish = (context) => {
+    if (client) {
+      const { topic, qos, payload } = context;
+      client.publish(topic, payload, { qos }, (error) => {
+        if (error) {
+          console.log("Publish error: ", error);
+        }
+      });
+    }
+  };
+
   // disconnect
   // https://github.com/mqttjs/MQTT.js#mqttclientendforce-options-callback
-  // const mqttDisconnect = () => {
-  //   if (client) {
-  //     try {
-  //       client.end(false, () => {
-  //         setConnectStatus("Connect");
-  //         console.log("disconnected successfully");
-  //       });
-  //     } catch (error) {
-  //       console.log("disconnect error:", error);
-  //     }
-  //   }
-  // };
+  const mqttDisconnect = () => {
+    if (client) {
+      try {
+        client.end(false, () => {
+          setConnectStatus("Connect");
+          console.log("disconnected successfully");
+        });
+      } catch (error) {
+        console.log("disconnect error:", error);
+      }
+    }
+  };
+
+  const mqttSub = (subscription) => {
+    if (client) {
+      // topic & QoS for MQTT subscribing
+      const { topic, qos } = subscription;
+      // subscribe topic
+      // https://github.com/mqttjs/MQTT.js#mqttclientsubscribetopictopic-arraytopic-object-options-callback
+      client.subscribe(topic, { qos }, (error) => {
+        if (error) {
+          console.log("Subscribe to topics error", error);
+          return;
+        }
+        console.log(`Subscribe to topics: ${topic}`);
+        // setIsSub(true);
+      });
+    }
+  };
+
+  // unsubscribe topic
+  // https://github.com/mqttjs/MQTT.js#mqttclientunsubscribetopictopic-array-options-callback
+  const mqttUnSub = (subscription) => {
+    if (client) {
+      const { topic, qos } = subscription;
+      client.unsubscribe(topic, { qos }, (error) => {
+        if (error) {
+          console.log("Unsubscribe error", error);
+          return;
+        }
+        console.log(`unsubscribed topic: ${topic}`);
+        // setIsSub(false);
+      });
+    }
+  };
 
   const handlePublish = async () => {
     const data: HTMLInputElement | null = document.getElementById(
       "form-input"
     ) as HTMLInputElement;
-    console.log(data?.value);
-    const responseData = JSON.stringify({ data: data.value });
-    const response = await fetch("http://localhost:3000", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: responseData,
-    });
+    // console.log(data?.value);
 
-    console.log(await response.json());
+    // send the message to the broker and the server together
+    publishRecord.payload = data.value;
+    mqttPublish(publishRecord);
+
+    // const responseData = JSON.stringify({ data: data.value });
+    // const response = await fetch("http://localhost:3000", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: responseData,
+    // });
+
+    // console.log(await response.json());
   };
+
   // listeners for mqtt client
   useEffect(() => {
     if (client) {
-      console.log(client);
+      // console.log(client);
       client.on("connect", () => {
         setConnectStatus("Connected.");
       });
@@ -73,12 +122,21 @@ function App() {
         setConnectStatus("Reconnecting...");
       });
       client.on("message", (topic, message) => {
+        // a new todo has been added, trigger update of list
+        console.log("trigger update");
         const payload = { topic, message: message.toString() };
+        console.log(payload);
         setPayload(payload);
       });
     } else {
       mqttConnect(brokerUrl, initialConnectionOptions);
     }
+
+    mqttSub(subscribeRecord);
+    return () => {
+      mqttUnSub(subscribeRecord);
+      mqttDisconnect();
+    };
   }, [client]);
 
   return (

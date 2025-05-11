@@ -1,7 +1,9 @@
 const host = {
-  protocol: "ws",
-  host: "broker.emqx.io",
-  port: 8083,
+  protocol: process.env.MQTT_PROTOCOL,
+  // host: "broker.emqx.io",
+  host: process.env.MQTT_HOST,
+  // port: 8083,
+  port: process.env.MQTT_PORT,
 };
 export const initialConnectionOptions = {
   // ws or wss
@@ -13,8 +15,8 @@ export const initialConnectionOptions = {
    * By default, EMQX allows clients to connect without authentication.
    * https://docs.emqx.com/en/enterprise/v4.4/advanced/auth.html#anonymous-login
    */
-  username: "emqx_test",
-  password: "emqx_test",
+  username: process.env.MQTT_USERNAME,
+  password: process.env.MQTT_PASSWORD,
   clean: true,
   reconnectPeriod: 1000, // ms
   connectTimeout: 30 * 1000, // ms

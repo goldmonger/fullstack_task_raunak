@@ -1,8 +1,15 @@
 import express from "express";
+import { data } from "../testData.js";
 const router = express.Router();
 
 router.get("/fetchAllTasks", (req, res) => {
-  res.send();
+  console.log("here");
+  const per_page = req.query.per_page || 10;
+  const page = req.query.page || 1;
+
+  res.send({
+    data: data,
+  });
 });
 
 router.get("/", (req, res) => {

@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import { router } from "./routes";
+import { router } from "./routes/index.js";
 
 const app = express();
 const serverPort = process.env.SERVER_PORT;
@@ -15,11 +15,11 @@ const corsOptions = {
 };
 
 //                                       Middleware
-// check if needed 
+// check if needed
 app.use(express.json());
 
 app.use(cors(corsOptions));
-app.use('/', router)
+app.use("/", router);
 
 app.listen(serverPort, () => {
   console.log(`Server live on port ${serverPort}`);

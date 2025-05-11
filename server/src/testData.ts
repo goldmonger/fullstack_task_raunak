@@ -48,6 +48,4 @@ const data = [
     content: "Note 12",
   },
 ];
-module.exports = {
-  data,
-};
+export { data };

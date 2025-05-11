@@ -92,10 +92,12 @@ const useMqtt = () => {
     ) as HTMLInputElement;
     // console.log(data?.value);
 
-    // send the message to the broker and the server together
+    // send the message to the broker
     publishRecord.payload = data.value;
     mqttPublish(publishRecord);
 
+
+    //              DEV POST TEST CODE
     // const responseData = JSON.stringify({ data: data.value });
     // const response = await fetch("http://localhost:3000", {
     //   method: "POST",
@@ -104,8 +106,9 @@ const useMqtt = () => {
     //   },
     //   body: responseData,
     // });
-
     // console.log(await response.json());
+
+
   };
 
   // listeners for mqtt client

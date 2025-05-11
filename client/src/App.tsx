@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import mqtt from "mqtt";
-import Connection from "./components/Connection";
 import { brokerUrl, initialConnectionOptions } from "./mqtt.config";
 
 // import './App.css'
@@ -12,6 +11,7 @@ function App() {
   const [payload, setPayload] = useState<null | any>(null);
   const [connectStatus, setConnectStatus] = useState<string>("Connect.");
 
+  // @ts-ignore
   const mqttConnect = (host, mqttOption) => {
     setConnectStatus("Connecting...");
     setClient(mqtt.connect(host, mqttOption));
@@ -25,10 +25,11 @@ function App() {
     qos: 0,
     payload: "",
   };
-
+// @ts-ignore
   const mqttPublish = (context) => {
     if (client) {
       const { topic, qos, payload } = context;
+      // @ts-ignore
       client.publish(topic, payload, { qos }, (error) => {
         if (error) {
           console.log("Publish error: ", error);
@@ -51,13 +52,14 @@ function App() {
       }
     }
   };
-
+// @ts-ignore
   const mqttSub = (subscription) => {
     if (client) {
       // topic & QoS for MQTT subscribing
       const { topic, qos } = subscription;
       // subscribe topic
       // https://github.com/mqttjs/MQTT.js#mqttclientsubscribetopictopic-arraytopic-object-options-callback
+      // @ts-ignore
       client.subscribe(topic, { qos }, (error) => {
         if (error) {
           console.log("Subscribe to topics error", error);
@@ -71,9 +73,11 @@ function App() {
 
   // unsubscribe topic
   // https://github.com/mqttjs/MQTT.js#mqttclientunsubscribetopictopic-array-options-callback
+  // @ts-ignore
   const mqttUnSub = (subscription) => {
     if (client) {
       const { topic, qos } = subscription;
+      // @ts-ignore
       client.unsubscribe(topic, { qos }, (error) => {
         if (error) {
           console.log("Unsubscribe error", error);
@@ -114,6 +118,7 @@ function App() {
       client.on("connect", () => {
         setConnectStatus("Connected.");
       });
+      // @ts-ignore
       client.on("error", (err) => {
         console.error("Connection error: ", err);
         client.end();
@@ -121,6 +126,7 @@ function App() {
       client.on("reconnect", () => {
         setConnectStatus("Reconnecting...");
       });
+      // @ts-ignore
       client.on("message", (topic, message) => {
         // a new todo has been added, trigger update of list
         console.log("trigger update");

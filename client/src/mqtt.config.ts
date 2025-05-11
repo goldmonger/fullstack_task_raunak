@@ -1,9 +1,9 @@
 const host = {
-  protocol: process.env.MQTT_PROTOCOL,
+  protocol: import.meta.env.VITE_MQTT_PROTOCOL,
   // host: "broker.emqx.io",
-  host: process.env.MQTT_HOST,
+  host: import.meta.env.VITE_MQTT_HOST,
   // port: 8083,
-  port: process.env.MQTT_PORT,
+  port: import.meta.env.VITE_MQTT_PORT,
 };
 export const initialConnectionOptions = {
   // ws or wss
@@ -15,8 +15,8 @@ export const initialConnectionOptions = {
    * By default, EMQX allows clients to connect without authentication.
    * https://docs.emqx.com/en/enterprise/v4.4/advanced/auth.html#anonymous-login
    */
-  username: process.env.MQTT_USERNAME,
-  password: process.env.MQTT_PASSWORD,
+  username: import.meta.env.VITE_MQTT_USERNAME,
+  password: import.meta.env.VITE_MQTT_PASSWORD,
   clean: true,
   reconnectPeriod: 1000, // ms
   connectTimeout: 30 * 1000, // ms

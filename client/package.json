@@ -23,6 +23,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.5",
     "antd": "^5.25.1",
+    "dotenv": "^16.5.0",
     "mqtt": "^5.13.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

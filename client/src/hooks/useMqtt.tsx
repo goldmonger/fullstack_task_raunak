@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { brokerUrl, initialConnectionOptions } from "../mqtt.config";
 import mqtt from "mqtt";
-
+import useNotes from "./useNotes";
 
 const useMqtt = () => {
+  const { refetch } = useNotes();
   const [client, setClient] = useState<null | any>(null);
   const [payload, setPayload] = useState<null | any>(null);
   const [connectStatus, setConnectStatus] = useState<string>("Connect.");
@@ -96,7 +97,6 @@ const useMqtt = () => {
     publishRecord.payload = data.value;
     mqttPublish(publishRecord);
 
-
     //              DEV POST TEST CODE
     // const responseData = JSON.stringify({ data: data.value });
     // const response = await fetch("http://localhost:3000", {
@@ -107,8 +107,6 @@ const useMqtt = () => {
     //   body: responseData,
     // });
     // console.log(await response.json());
-
-
   };
 
   // listeners for mqtt client
@@ -129,10 +127,7 @@ const useMqtt = () => {
       // @ts-ignore
       client.on("message", (topic, message) => {
         // a new todo has been added, trigger update of list
-        console.log("trigger update");
-        const payload = { topic, message: message.toString() };
-        console.log(payload);
-        setPayload(payload);
+        refetch();
       });
     } else {
       mqttConnect(brokerUrl, initialConnectionOptions);
@@ -145,7 +140,7 @@ const useMqtt = () => {
     };
   }, [client]);
 
-  return {handlePublish};
+  return { handlePublish };
 };
 
 export default useMqtt;

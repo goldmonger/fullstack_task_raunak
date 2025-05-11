@@ -1,10 +1,8 @@
 import React from "react";
+import useMqtt from "../hooks/useMqtt";
 
-interface IAddNoteProps {
-  submit: () => Promise<void>;
-}
-
-const AddNote = ({ submit }: IAddNoteProps) => {
+const AddNote = () => {
+  const { handlePublish } = useMqtt();
   return (
     <div className="pt-2 pb-2 3xl:pb-5">
       <div className="flex flex-col items-end md:items-center md:flex-row gap-3 md:gap-5 w-full">
@@ -16,7 +14,7 @@ const AddNote = ({ submit }: IAddNoteProps) => {
         />
         <button
           className="border w-1/2 md:w-1/4 py-1 md:py-2 px-4 text-[20px] 3xl:text-[28px] rounded-xl flex items-center justify-center gap-3 bg-[#92400E] text-white"
-          onClick={submit}
+          onClick={handlePublish}
         >
           <div className="rounded-full w-4 h-4 3xl:w-7 3xl:h-7 bg-white flex items-center justify-center">
             <div className="relative w-4 h-0.5">

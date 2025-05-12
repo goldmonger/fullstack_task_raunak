@@ -5,7 +5,7 @@
   
 API  
 /fetchAllTasks - GET - retrieves all tasks  
-/deleteAllTasks - GET - deletes all tasks  
+/deleteAllTasks - GET - deletes all tasks in cache  
   
    
 ```
